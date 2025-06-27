@@ -1,6 +1,5 @@
 import streamlit as st
 import re
-import io
 
 st.title("📘 Organizador de Guías Técnicas")
 st.subheader("📥 Pegá tu lista de pasos (uno por línea):")
@@ -57,25 +56,13 @@ if st.button("📄 Organizar y mostrar pasos"):
         mostrar_pasos_con_checks(pasos_organizados)
 
         contenido = exportar_txt(pasos_organizados)
-
-        col1, col2 = st.columns([3, 2])
-        with col1:
-            nombre_archivo = st.text_input("📝 Nombre del archivo", value="guia_tecnica")
-
-        # Sanear nombre del archivo
-        nombre_archivo_limpio = re.sub(r'[\\/*?:"<>|]', "", nombre_archivo).strip()
-        if not nombre_archivo_limpio:
-            nombre_archivo_limpio = "guia_tecnica"
-
-        with col2:
-            st.download_button("💾 Guardar como TXT", contenido, file_name=f"{nombre_archivo_limpio}.txt")
+        st.download_button("💾 Guardar como TXT", contenido, file_name="guia_tecnica.txt")
     else:
         st.warning("Pegá una lista primero.")
 
 # Cargar archivo externo
 st.markdown("---")
 st.subheader("📂 O cargar un archivo .txt con pasos:")
-
 archivo_subido = st.file_uploader("Elegí un archivo .txt", type=["txt"])
 
 if archivo_subido:
@@ -83,3 +70,4 @@ if archivo_subido:
     pasos_archivo = organizar_pasos(contenido_archivo)
     st.markdown("### ✅ Pasos desde el archivo:")
     mostrar_pasos_con_checks(pasos_archivo)
+
