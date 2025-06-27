@@ -1,6 +1,8 @@
 import streamlit as st
 import re
 
+pasos_organizados = []
+
 st.title("📘 Organizador de Guías Técnicas")
 
 st.subheader("📥 Pegá tu lista de pasos (uno por línea):")
