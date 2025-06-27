@@ -14,7 +14,7 @@ def calcular_indentacion(id_paso):
         nivel += 1
     return nivel
 
-# Función que organiza los pasos
+# Organiza los pasos
 def organizar_pasos(texto):
     lineas = texto.strip().split('\n')
     pasos = []
@@ -26,37 +26,33 @@ def organizar_pasos(texto):
             pasos.append(("⚠️", f"Línea sin ID reconocida: {linea.strip()}"))
     return pasos
 
-# Función que los muestra con markdown
-def generar_markdown(pasos):
-    salida = ""
+# Muestra pasos con checkboxes en la misma fila
+def mostrar_pasos_con_checks(pasos):
     for id_paso, contenido in pasos:
+        cols = st.columns([0.9, 0.1])
         if id_paso == "⚠️":
-            salida += f"\n⚠️ `{contenido}`\n"
+            cols[0].markdown(f"⚠️ `{contenido}`")
         else:
-            indentacion = "   " * calcular_indentacion(id_paso)
-            salida += f"{indentacion}- **{id_paso}** {contenido}\n"
-    return salida
+            indent = "&nbsp;" * (calcular_indentacion(id_paso) * 4)
+            cols[0].markdown(f"{indent}- **{id_paso}** {contenido}", unsafe_allow_html=True)
+            cols[1].checkbox("", key=id_paso)
 
-# Procesar y mostrar
+# Guardar texto en archivo
+def exportar_txt(pasos):
+    return "\n".join(f"{id_paso} {contenido}" for id_paso, contenido in pasos)
+
+# Mostrar resultado
 if st.button("📄 Organizar y mostrar pasos"):
     if texto:
         pasos_organizados = organizar_pasos(texto)
-        markdown_resultado = generar_markdown(pasos_organizados)
         st.markdown("---")
-        st.markdown(markdown_resultado)
-
-        st.markdown("### ✅ Marcá los pasos completados:")
-        for id_paso, contenido in pasos_organizados:
-            if id_paso != "⚠️":
-                st.checkbox(f"{id_paso} {contenido}", key=id_paso)
-
-        # Botón para guardar .txt
-        contenido = "\n".join(f"{id_paso} {linea}" for id_paso, linea in pasos_organizados)
+        mostrar_pasos_con_checks(pasos_organizados)
+        contenido = exportar_txt(pasos_organizados)
         st.download_button("💾 Guardar como TXT", contenido, file_name="guia_tecnica.txt")
     else:
         st.warning("Pegá una lista primero.")
 
-# --- Cargar archivo desde el dispositivo ---
+# Cargar archivo externo
 st.markdown("---")
 st.subheader("📂 O cargar un archivo .txt con pasos:")
 
@@ -65,10 +61,5 @@ archivo_subido = st.file_uploader("Elegí un archivo .txt", type=["txt"])
 if archivo_subido:
     contenido_archivo = archivo_subido.read().decode("utf-8")
     pasos_archivo = organizar_pasos(contenido_archivo)
-    markdown_archivo = generar_markdown(pasos_archivo)
     st.markdown("### ✅ Pasos desde el archivo:")
-    st.markdown(markdown_archivo)
-    st.markdown("### ✅ Marcá los pasos completados:")
-    for id_paso, contenido in pasos_archivo:
-        if id_paso != "⚠️":
-            st.checkbox(f"{id_paso} {contenido}", key="archivo_" + id_paso)
+    mostrar_pasos_con_checks(pasos_archivo)
