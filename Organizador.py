@@ -50,3 +50,13 @@ if st.button("📄 Organizar y mostrar pasos"):
         st.download_button("💾 Guardar como TXT", contenido, file_name="guia_tecnica.txt")
     else:
         st.warning("Pegá una lista primero.")
+
+st.markdown("---") # supuesto boton cargar
+st.subheader("📂 O cargar un archivo .txt con pasos:")
+
+archivo_subido = st.file_uploader("Elegí un archivo .txt", type=["txt"])
+
+if archivo_subido:
+    contenido_archivo = archivo_subido.read().decode("utf-8")
+    st.markdown("### ✅ Pasos desde archivo cargado:")
+    st.markdown(formatear_pasos(contenido_archivo))
