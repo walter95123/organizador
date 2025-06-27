@@ -29,13 +29,21 @@ def organizar_pasos(texto):
 # Muestra pasos con checkboxes en la misma fila
 def mostrar_pasos_con_checks(pasos):
     for id_paso, contenido in pasos:
-        cols = st.columns([0.9, 0.1])
         if id_paso == "⚠️":
-            cols[0].markdown(f"⚠️ `{contenido}`")
+            st.markdown(f"⚠️ `{contenido}`")
         else:
             indent = "&nbsp;" * (calcular_indentacion(id_paso) * 4)
-            cols[0].markdown(f"{indent}- **{id_paso}** {contenido}", unsafe_allow_html=True)
-            cols[1].checkbox("", key=id_paso)
+            st.markdown(
+                f"""
+                <div style='display: flex; align-items: center;'>
+                    <input type="checkbox" style="margin-right: 10px;" />
+                    <div style="flex: 1;">
+                        {indent}<strong>{id_paso}</strong> {contenido}
+                    </div>
+                </div>
+                """,
+                unsafe_allow_html=True
+            )
 
 
 
