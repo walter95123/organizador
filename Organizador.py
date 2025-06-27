@@ -1,7 +1,6 @@
 import streamlit as st
 import re
 
-pasos_organizados = []
 
 st.title("📘 Organizador de Guías Técnicas")
 
@@ -39,12 +38,17 @@ if st.button("📄 Organizar y mostrar pasos"):
 
 import io
 
-# Mostrar pasos organizados
-if pasos_organizados:
-    markdown_resultado = generar_markdown(pasos_organizados)
-    st.markdown("---")
-    st.markdown(markdown_resultado)
+pasos_organizados = []
 
-    # Mostrar botón para guardar como TXT
-    contenido = "\n".join(linea for _, linea in pasos_organizados)
-    st.download_button("💾 Guardar como TXT", contenido, file_name="guia_tecnica.txt")
+if st.button("📄 Organizar y mostrar pasos"):
+    if texto:
+        pasos_organizados = organizar_pasos(texto)
+        markdown_resultado = generar_markdown(pasos_organizados)
+        st.markdown("---")
+        st.markdown(markdown_resultado)
+
+        # Mostrar botón para guardar como TXT
+        contenido = "\n".join(linea for _, linea in pasos_organizados)
+        st.download_button("💾 Guardar como TXT", contenido, file_name="guia_tecnica.txt")
+    else:
+        st.warning("Pegá una lista primero.")
