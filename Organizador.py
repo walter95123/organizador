@@ -70,4 +70,3 @@ if archivo_subido:
     pasos_archivo = organizar_pasos(contenido_archivo)
     st.markdown("### ✅ Pasos desde el archivo:")
     mostrar_pasos_con_checks(pasos_archivo)
-
