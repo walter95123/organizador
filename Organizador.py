@@ -7,9 +7,12 @@ st.subheader("📥 Pegá tu lista de pasos (uno por línea):")
 texto = st.text_area("")
 
 def calcular_indentacion(id_paso):
-    # Cuenta cuántos niveles tiene el ID (1 → 0, 1.1 → 1, 1.1a → 2)
-    if re.match(r'^\d+[a-z]$', id_paso): return 2
-    return id_paso.count('.')
+    # Detecta niveles según formato: 1, 1.1, 1.1a, etc.
+    id_limpio = re.sub(r'[^\d\.]', '', id_paso)  # elimina letras (como la "a")
+    nivel = id_limpio.count('.')
+    if re.search(r'[a-zA-Z]$', id_paso):
+        nivel += 1  # si termina en letra, subnivel más
+    return nivel
 
 def formatear_pasos(texto):
     lineas = texto.strip().split('\n')
