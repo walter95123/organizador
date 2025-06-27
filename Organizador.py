@@ -1,24 +1,33 @@
 import streamlit as st
+import re
 
-st.title("✅ Organizador de Tareas")
-st.write("Pegá acá tus pasos técnicos, guías o procedimientos.")
+st.title("📘 Organizador de Guías Técnicas")
 
-# Variable de estado para guardar tareas
-if "tareas" not in st.session_state:
-    st.session_state.tareas = []
+st.subheader("📥 Pegá tu lista de pasos (uno por línea):")
+texto = st.text_area("")
 
-# Entrada de nueva tarea
-nueva_tarea = st.text_input("📌 Escribí una nueva tarea:")
+def calcular_indentacion(id_paso):
+    # Cuenta cuántos niveles tiene el ID (1 → 0, 1.1 → 1, 1.1a → 2)
+    if re.match(r'^\d+[a-z]$', id_paso): return 2
+    return id_paso.count('.')
 
-# Botón para agregarla
-if st.button("Agregar tarea"):
-    if nueva_tarea:
-        st.session_state.tareas.append(nueva_tarea)
-        st.success("Tarea agregada.")
+def formatear_pasos(texto):
+    lineas = texto.strip().split('\n')
+    salida = ""
+    for linea in lineas:
+        match = re.match(r'^([0-9]+(?:\.[0-9]+)*[a-z]?)\s+(.*)', linea.strip())
+        if match:
+            id_paso = match.group(1)
+            contenido = match.group(2)
+            indentacion = "   " * calcular_indentacion(id_paso)
+            salida += f"{indentacion}- **{id_paso}** {contenido}\n"
+        elif linea.strip() != "":
+            salida += f"\n⚠️ Línea sin ID reconocida: `{linea.strip()}`\n"
+    return salida
+
+if st.button("📄 Organizar y mostrar pasos"):
+    if texto:
+        st.markdown("---")
+        st.markdown(formatear_pasos(texto))
     else:
-        st.warning("Escribí algo antes de agregar.")
-
-# Mostrar tareas actuales
-st.subheader("📋 Lista de tareas:")
-for i, tarea in enumerate(st.session_state.tareas, 1):
-    st.write(f"{i}. {tarea}")
+        st.warning("Pegá una lista primero.")
