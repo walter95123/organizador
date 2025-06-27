@@ -39,12 +39,12 @@ if st.button("📄 Organizar y mostrar pasos"):
 
 import io
 
+# Mostrar pasos organizados
 if pasos_organizados:
-    contenido = "\n".join(pasos_organizados)
-    archivo = io.BytesIO(contenido.encode("utf-8"))
-    st.download_button(
-        label="📥 Descargar como TXT",
-        data=archivo,
-        file_name="guia_tecnica.txt",
-        mime="text/plain"
-    )
+    markdown_resultado = generar_markdown(pasos_organizados)
+    st.markdown("---")
+    st.markdown(markdown_resultado)
+
+    # Mostrar botón para guardar como TXT
+    contenido = "\n".join(linea for _, linea in pasos_organizados)
+    st.download_button("💾 Guardar como TXT", contenido, file_name="guia_tecnica.txt")
