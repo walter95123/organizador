@@ -51,12 +51,15 @@ if st.button("📄 Organizar y mostrar pasos"):
     else:
         st.warning("Pegá una lista primero.")
 
-st.markdown("---") # supuesto boton cargar
+# --- Cargar archivo desde el dispositivo ---
+st.markdown("---")
 st.subheader("📂 O cargar un archivo .txt con pasos:")
 
 archivo_subido = st.file_uploader("Elegí un archivo .txt", type=["txt"])
 
 if archivo_subido:
     contenido_archivo = archivo_subido.read().decode("utf-8")
-    st.markdown("### ✅ Pasos desde archivo cargado:")
-    st.markdown(formatear_pasos(contenido_archivo))
+    pasos_archivo = organizar_pasos(contenido_archivo)
+    markdown_archivo = generar_markdown(pasos_archivo)
+    st.markdown("### ✅ Pasos desde el archivo:")
+    st.markdown(markdown_archivo)
