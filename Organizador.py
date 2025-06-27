@@ -45,9 +45,13 @@ if st.button("📄 Organizar y mostrar pasos"):
         st.markdown("---")
         st.markdown(markdown_resultado)
 
+        st.markdown("### ✅ Marcá los pasos completados:")
+        for id_paso, contenido in pasos_organizados:
+            if id_paso != "⚠️":
+                st.checkbox(f"{id_paso} {contenido}", key=id_paso)
+
         # Botón para guardar .txt
         contenido = "\n".join(f"{id_paso} {linea}" for id_paso, linea in pasos_organizados)
-
         st.download_button("💾 Guardar como TXT", contenido, file_name="guia_tecnica.txt")
     else:
         st.warning("Pegá una lista primero.")
@@ -64,3 +68,7 @@ if archivo_subido:
     markdown_archivo = generar_markdown(pasos_archivo)
     st.markdown("### ✅ Pasos desde el archivo:")
     st.markdown(markdown_archivo)
+    st.markdown("### ✅ Marcá los pasos completados:")
+    for id_paso, contenido in pasos_archivo:
+        if id_paso != "⚠️":
+            st.checkbox(f"{id_paso} {contenido}", key="archivo_" + id_paso)
