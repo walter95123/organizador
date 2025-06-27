@@ -61,8 +61,14 @@ if st.button("📄 Organizar y mostrar pasos"):
         col1, col2 = st.columns([3, 2])
         with col1:
             nombre_archivo = st.text_input("📝 Nombre del archivo", value="guia_tecnica")
+
+        # Sanear nombre del archivo
+        nombre_archivo_limpio = re.sub(r'[\\/*?:"<>|]', "", nombre_archivo).strip()
+        if not nombre_archivo_limpio:
+            nombre_archivo_limpio = "guia_tecnica"
+
         with col2:
-            st.download_button("💾 Guardar como TXT", contenido, file_name=f"{nombre_archivo}.txt")
+            st.download_button("💾 Guardar como TXT", contenido, file_name=f"{nombre_archivo_limpio}.txt")
     else:
         st.warning("Pegá una lista primero.")
 
