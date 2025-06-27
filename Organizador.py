@@ -46,7 +46,8 @@ if st.button("📄 Organizar y mostrar pasos"):
         st.markdown(markdown_resultado)
 
         # Botón para guardar .txt
-        contenido = "\n".join(linea for _, linea in pasos_organizados)
+        contenido = "\n".join(f"{id_paso} {linea}" for id_paso, linea in pasos_organizados)
+
         st.download_button("💾 Guardar como TXT", contenido, file_name="guia_tecnica.txt")
     else:
         st.warning("Pegá una lista primero.")
