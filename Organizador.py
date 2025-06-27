@@ -58,7 +58,12 @@ if st.button("📄 Organizar y mostrar pasos"):
         st.markdown("---")
         mostrar_pasos_con_checks(pasos_organizados)
         contenido = exportar_txt(pasos_organizados)
-        st.download_button("💾 Guardar como TXT", contenido, file_name="guia_tecnica.txt")
+        col1, col2 = st.columns([3, 2])
+with col1:
+    nombre_archivo = st.text_input("📝 Nombre del archivo", value="guia_tecnica")
+with col2:
+    st.download_button("💾 Guardar como TXT", contenido, file_name=f"{nombre_archivo}.txt")
+
     else:
         st.warning("Pegá una lista primero.")
 
