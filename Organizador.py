@@ -34,3 +34,15 @@ if st.button("📄 Organizar y mostrar pasos"):
         st.markdown(formatear_pasos(texto))
     else:
         st.warning("Pegá una lista primero.")
+
+import io
+
+if pasos_organizados:
+    contenido = "\n".join(pasos_organizados)
+    archivo = io.BytesIO(contenido.encode("utf-8"))
+    st.download_button(
+        label="📥 Descargar como TXT",
+        data=archivo,
+        file_name="guia_tecnica.txt",
+        mime="text/plain"
+    )
